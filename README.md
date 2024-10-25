@@ -1,7 +1,7 @@
-# pylons
+# pylnlst
 > CLI tool to automate the creation of symbolic links in a destination directory.
 
-## Why pylons?
+## Why pylnlst?
 
 Many times I find myself creating multiple symbolic links manually using [Nautilus](https://gitlab.gnome.org/GNOME/nautilus) (or similar) and feeling that the process could be automated. When tried to approach such automation using bash I've failed miserably because find a lot of problems when you try to create links containing spaces, brackets, or exclamation marks because it requires escaping such characters.
 
@@ -16,7 +16,7 @@ The idea is:
 The usage is as follows:
 
 ```bash
-python pylons.py --file-list fILELIST --dst DST_DIR
+python pylnlst.py --file-list fILELIST --dst DST_DIR
 ```
 
 ## Dev notes
@@ -28,8 +28,27 @@ There are currently no tests.
 To check that the packaged script works as expected type:
 
 ```bash
-# you must be in the directory that contains pylons package, not
-# within pylons
-$ uv run --directory pylons pylons --version
+# you must be in the directory that contains pylnlst package, not
+# within pylnlst
+$ uv run --directory pylnlst pylnlst --version
 ```
 The application can be built with `uv build` and published with `uv publish`.
+
+To publish to TestPyPI:
+
+```bash
+$ uv publish
+ --publish-url https://test.pypi.org/legacy/ --token <test-pypi-token-with-sufficient-scope>
+```
+
+| NOTE: |
+| :---- |
+| Some of the tokens are defined on a per-project basis. Those won't work for new projects. |
+
+
+To publish to PyPI:
+
+```bash
+$ uv build
+$ uv publish --token <pypi-token>
+```

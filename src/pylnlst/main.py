@@ -1,4 +1,4 @@
-"""Pylons: tool to create linux symbolic links seamlessly."""
+"""pylnlst: tool to create linux symbolic links seamlessly."""
 
 from collections.abc import Iterator
 from pathlib import Path
@@ -7,7 +7,7 @@ from typing import Annotated
 import typer
 from rich import print
 
-__version__ = "0.1.0"
+__version__ = "0.1.1.rc0"
 
 FILE_LIST_DOC = """
 Path to the file containing the list of files to process. Note that you can
@@ -32,7 +32,7 @@ class LinkNameExhaustedError(Exception):
 def version_callback(*, value: bool) -> None:
     """Print the version."""
     if value:
-        print(f"pylons {__version__}")
+        print(f"pylnlst {__version__}")
         raise typer.Exit
 
 
@@ -80,7 +80,7 @@ def get_symbolic_link_name(dst_dir: Path, file: Path) -> Path:
     return link_name
 
 
-def pylons(
+def pylnlst(
     list_file: Annotated[
         Path,
         typer.Option(
@@ -114,7 +114,7 @@ def pylons(
     """
     Automate the creation of symbolic links in a destination directory.
 
-    Pylons automate the creation of symbolic links by using a list of file paths
+    pylnlst automate the creation of symbolic links by using a list of file paths
     from a specified file and creates symbolic links for each entry in a
     designated target directory.
     This tool is can process files having spaces, brackets, or special
@@ -143,7 +143,7 @@ def pylons(
 
 def main() -> None:
     """Entry point for the CLI app."""
-    typer.run(pylons)
+    typer.run(pylnlst)
 
 
 if __name__ == "__main__":
