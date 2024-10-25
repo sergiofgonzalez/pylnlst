@@ -24,3 +24,13 @@ python pylons.py --file-list fILELIST --dst DST_DIR
 Most of the script functionality relies on the [Typer](https://github.com/fastapi/typer) framework. Project management relies on [uv](https://github.com/astral-sh/uv), and linting/formatting is done with [Ruff](https://github.com/astral-sh/ruff).
 
 There are currently no tests.
+
+To check that the packaged script works as expected type:
+
+```bash
+# you must be in the directory that contains pylons package, not
+# within pylons
+$ uv run --directory pylons pylons --version
+```
+
+You can build your package with `uv build`

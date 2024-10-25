@@ -7,6 +7,8 @@ from typing import Annotated
 import typer
 from rich import print
 
+__version__ = "0.1.0"
+
 FILE_LIST_DOC = """
 Path to the file containing the list of files to process. Note that you can
 prefix a line with '#' to comment out that line.
@@ -25,6 +27,13 @@ class FileNotExistError(Exception):
 
 class LinkNameExhaustedError(Exception):
     """Error raised when couldn't find a unique name for the link."""
+
+
+def version_callback(*, value: bool) -> None:
+    """Print the version."""
+    if value:
+        print(f"pylons {__version__}")
+        raise typer.Exit
 
 
 def fail_if_not_exists(path_to_file: Path) -> None:
@@ -71,7 +80,7 @@ def get_symbolic_link_name(dst_dir: Path, file: Path) -> Path:
     return link_name
 
 
-def main(
+def pylons(
     list_file: Annotated[
         Path,
         typer.Option(
@@ -97,6 +106,10 @@ def main(
             help=DST_DIR_DOC,
         ),
     ],
+    _: Annotated[
+        bool | None,
+        typer.Option("--version", callback=version_callback, is_eager=True),
+    ] = None,
 ) -> None:
     """
     Automate the creation of symbolic links in a destination directory.
@@ -128,5 +141,10 @@ def main(
                 print("[green][bold]OK[/bold][/green] :white_check_mark:")
 
 
+def main() -> None:
+    """Entry point for the CLI app."""
+    typer.run(pylons)
+
+
 if __name__ == "__main__":
-    typer.run(main)
+    main()
