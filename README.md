@@ -54,7 +54,9 @@ $ mkdir pylnlst-test
 $ cd pylnlst-test
 $ python -m venv .venv --upgrade-deps
 $ source .venv/bin/activate
-(.venv) $ pylnlst --verion
+(.venv) $ pip install pylnlst==0.1.1 --extra-index-url https://test.pypi.org/simple/
+(.venv) $ pylnlst --version
+pylnlst 0.1.1
 ```
 
 
