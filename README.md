@@ -37,6 +37,8 @@ The application can be built with `uv build` and published with `uv publish`.
 To publish to TestPyPI:
 
 ```bash
+$ rm -rf dist
+$ uv build
 $ uv publish
  --publish-url https://test.pypi.org/legacy/ --token <test-pypi-token-with-sufficient-scope>
 ```
@@ -45,10 +47,21 @@ $ uv publish
 | :---- |
 | Some of the tokens are defined on a per-project basis. Those won't work for new projects. |
 
+You will be able to test that it works by simply doing:
+
+```bash
+$ mkdir pylnlst-test
+$ cd pylnlst-test
+$ python -m venv .venv --upgrade-deps
+$ source .venv/bin/activate
+(.venv) $ pylnlst --verion
+```
+
 
 To publish to PyPI:
 
 ```bash
+$ rm -rf dist
 $ uv build
 $ uv publish --token <pypi-token>
 ```
