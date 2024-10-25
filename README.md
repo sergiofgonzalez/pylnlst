@@ -32,5 +32,4 @@ To check that the packaged script works as expected type:
 # within pylons
 $ uv run --directory pylons pylons --version
 ```
-
-You can build your package with `uv build`
+The application can be built with `uv build` and published with `uv publish`.
