@@ -3,7 +3,7 @@
 
 ## Why pylnlst?
 
-Many times I find myself creating multiple symbolic links manually using [Nautilus](https://gitlab.gnome.org/GNOME/nautilus) (or similar) and feeling that the process could be automated. When tried to approach such automation using bash I've failed miserably because find a lot of problems when you try to create links containing spaces, brackets, or exclamation marks because it requires escaping such characters.
+Many times I find myself creating multiple symbolic links manually using [Nautilus](https://gitlab.gnome.org/GNOME/nautilus) (or similar) and feeling that the process could be automated. When tried to approach such automation using bash I've failed miserably because it's very difficult to deal with file names containing spaces, brackets, or exclamation marks because escaping such characters is required.
 
 This tool has been created to address those problems.
 
@@ -16,7 +16,7 @@ The idea is:
 The usage is as follows:
 
 ```bash
-python pylnlst.py --file-list fILELIST --dst DST_DIR
+pylnlst --file-list fILELIST --dst DST_DIR
 ```
 
 ## Dev notes

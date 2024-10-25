@@ -7,7 +7,7 @@ from typing import Annotated
 import typer
 from rich import print
 
-__version__ = "0.1.1.rc0"
+__version__ = "0.1.1"
 
 FILE_LIST_DOC = """
 Path to the file containing the list of files to process. Note that you can
