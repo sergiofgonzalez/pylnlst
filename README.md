@@ -67,3 +67,17 @@ $ rm -rf dist
 $ uv build
 $ uv publish --token <pypi-token>
 ```
+
+And you can test it works by doing:
+
+You will be able to test that it works by simply doing:
+
+```bash
+$ mkdir pylnlst
+$ cd pylnlst
+$ python -m venv .venv --upgrade-deps
+$ source .venv/bin/activate
+(.venv) $ pip install pylnlst
+(.venv) $ pylnlst --version
+pylnlst 0.1.1
+```
