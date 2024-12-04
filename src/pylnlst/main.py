@@ -5,9 +5,9 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-from rich import print
+from rich import print  # noqa: A004
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 FILE_LIST_DOC = """
 Path to the file containing the list of files to process. Note that you can
@@ -18,11 +18,11 @@ DST_DIR_DOC = """
 Path to the destination directory where the symbolic links will be created.
 """
 
+BASE_SRC_DIR_DOC = """
+Assumed base source directory for all the files in the filelist.
+"""
+
 MAX_CLASHING_FILE_INDEX = 1000
-
-
-class FileNotExistError(Exception):
-    """Error that is raised when a file doesn't exist."""
 
 
 class LinkNameExhaustedError(Exception):
@@ -43,7 +43,10 @@ def fail_if_not_exists(path_to_file: Path) -> None:
         raise FileNotFoundError(msg)
 
 
-def files_from_filelist(filelist: Path | str) -> Iterator[Path]:
+def files_from_filelist(
+    filelist: Path | str,
+    base_dir: Path | str | None,
+) -> Iterator[Path]:
     """Return the next file in the filelist."""
     if isinstance(filelist, str):
         filelist = Path(filelist)
@@ -54,8 +57,19 @@ def files_from_filelist(filelist: Path | str) -> Iterator[Path]:
             stripped_line = line.strip()
             if stripped_line.startswith("#") or len(stripped_line) == 0:
                 continue
-            path_to_file = Path(stripped_line)
-            fail_if_not_exists(path_to_file)
+            path_to_file = (
+                base_dir / Path(stripped_line)
+                if base_dir is not None
+                else Path(stripped_line)
+            )
+            try:
+                fail_if_not_exists(path_to_file)
+            except FileNotFoundError as e:
+                print(
+                    f"[red][bold]ERROR in filelist files: ({e}) "
+                    "Are you missing --base-src-dir?[/bold][/red] :x:",
+                )
+                raise typer.Exit(code=1) from e
             yield path_to_file
 
 
@@ -106,21 +120,33 @@ def pylnlst(
             help=DST_DIR_DOC,
         ),
     ],
+    base_src_dir: Annotated[
+        Path | None,
+        typer.Option(
+            exists=False,
+            dir_okay=True,
+            file_okay=False,
+            readable=True,
+            resolve_path=True,
+            show_default=False,
+            help=BASE_SRC_DIR_DOC,
+        ),
+    ] = None,
     _: Annotated[
         bool | None,
         typer.Option("--version", callback=version_callback, is_eager=True),
     ] = None,
 ) -> None:
-    """
-    Automate the creation of symbolic links in a destination directory.
+    """Automate the creation of symbolic links in a destination directory.
 
-    pylnlst automate the creation of symbolic links by using a list of file paths
-    from a specified file and creates symbolic links for each entry in a
+    pylnlst automate the creation of symbolic links by using a list of file
+    paths from a specified file and creates symbolic links for each entry in a
     designated target directory.
-    This tool is can process files having spaces, brackets, or special
-    characters in their names.
+    The source files can be optionally prefixed by a base directory.
+    This tool can process files having spaces, brackets, or special characters
+    in their names.
     """
-    for file in files_from_filelist(list_file):
+    for file in files_from_filelist(list_file, base_src_dir):
         try:
             print(f"'{file}': ", end="")
             link_name = get_symbolic_link_name(dst_dir, file)

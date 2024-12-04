@@ -13,10 +13,16 @@ The idea is:
 + The tool reads the entries from the file, one by one, and creates a symbolic link in the specified target location, pointing to the original file.
 + If a file with the same name already exists, a suffix is added so that there is no name clash. A warning is displayed.
 
-The usage is as follows:
+The simplest usage is as follows:
 
 ```bash
-pylnlst --file-list fILELIST --dst DST_DIR
+pylnlst --list-file fILELIST --dst-dir DST_DIR
+```
+
+You can find all the options running:
+
+```bash
+pylnlst --help
 ```
 
 ## Dev notes
@@ -34,13 +40,14 @@ $ uv run --directory pylnlst pylnlst --version
 ```
 The application can be built with `uv build` and published with `uv publish`.
 
-To publish to TestPyPI:
+To publish to TestPyPI, adjust the version to a release candidate (e.g., x.y.z.rc<N>)
 
 ```bash
 $ rm -rf dist
 $ uv build
-$ uv publish
- --publish-url https://test.pypi.org/legacy/ --token <test-pypi-token-with-sufficient-scope>
+$ uv publish \
+ --publish-url https://test.pypi.org/legacy/ \
+ --token <test-pypi-token-with-sufficient-scope>
 ```
 
 | NOTE: |
@@ -80,4 +87,10 @@ $ source .venv/bin/activate
 (.venv) $ pip install pylnlst
 (.venv) $ pylnlst --version
 pylnlst 0.1.1
+```
+
+To update a dependency to a particular version:
+
+```bash
+uv add 'typer>=0.14.0' --upgrade-package typer
 ```
